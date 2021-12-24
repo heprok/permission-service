@@ -1,0 +1,25 @@
+server:
+  port: 8080
+spring:
+  profiles:
+    active: ${env.spring_profiles_active:local}
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+  datasource:
+    url: jdbc:postgresql://${env.DB_HOST:localhost}:${env.DB_PORT:5432}/${env.spring_profiles_active}_permission
+    username: ${env.DB_USER:ok}
+    password: ${env.DB_PASSWORD:ok}
+    hikari:
+      idle-timeout: 20000
+      minimum-idle: 1
+      maximum-pool-size: 8
+  jpa:
+    hibernate:
+      ddl-auto: none
+    generate-ddl: false
+    show-sql: false
+    open-in-view: false
+  liquibase:
+    change-log: migration/db.changelog.yml

@@ -1,0 +1,142 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: oleg@briolink.com
+      changes:
+        - createTable:
+            tableName: permission_role
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: level
+                  type: int
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: permission_right
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: access_object_type
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: default_permission_right
+            columns:
+              - column:
+                  name: uuid
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_role_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_default_permission_right_permission_role_id
+                    references: permission_role(id)
+                    nullable: false
+              - column:
+                  name: right_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_default_permission_right_permission_right_id
+                    references: permission_right(id)
+                    nullable: false
+              - column:
+                  name: access_object_type_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_default_permission_right_access_object_type_id
+                    references: access_object_type(id)
+                    nullable: false
+              - column:
+                  name: enabled
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: configurable
+                  type: boolean
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: user_permission_role
+            columns:
+              - column:
+                  name: uuid
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_uuid
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_user_permission_role_permission_role_id
+                    references: permission_role(id)
+                    nullable: false
+              - column:
+                  name: access_object_type_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_user_permission_role_access_object_type_id
+                    references: access_object_type(id)
+                    nullable: false
+              - column:
+                  name: access_object_uuid
+                  type: uuid
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: user_permission_right
+            columns:
+              - column:
+                  name: uuid
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_role_uuid
+                  type: uuid
+                  constraints:
+                    foreignKeyName: fk_user_permission_right_user_permission_role_uuid
+                    references: user_permission_role(uuid)
+                    nullable: false
+              - column:
+                  name: right_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_user_permission_right_permission_right_id
+                    references: permission_right(id)
+                    nullable: false
