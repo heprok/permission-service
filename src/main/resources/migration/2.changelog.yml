@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: oleg@briolink.com
+      changes:
+        - insert:
+            tableName: permission_role
+            columns:
+              - column:
+                  name: name
+                  value: Owner
+              - column:
+                  name: level
+                  value: 1
+        - insert:
+            tableName: permission_role
+            columns:
+              - column:
+                  name: name
+                  value: Owner
+              - column:
+                  name: level
+                  value: 1
+        - insert:
+            tableName: permission_role
+            columns:
+              - column:
+                  name: name
+                  value: Owner
+              - column:
+                  name: level
+                  value: 1
+        - insert:
+            tableName: permission_role
+            columns:
+              - column:
+                  name: name
+                  value: Owner
+              - column:
+                  name: level
+                  value: 1
+        - insert:
+            tableName: permission_role
+            columns:
+              - column:
+                  name: name
+                  value: Owner
+              - column:
+                  name: level
+                  value: 1
+
