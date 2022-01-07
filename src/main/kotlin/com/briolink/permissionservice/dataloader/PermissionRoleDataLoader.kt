@@ -1,3 +1,0 @@
-package com.briolink.permissionservice.dataloader
-
-class PermissionRoleDataLoader

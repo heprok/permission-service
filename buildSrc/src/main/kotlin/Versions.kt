@@ -6,6 +6,7 @@ object Versions {
     const val KOTLIN = "1.6.10"
     const val SPRING_BOOT = "2.5.5"
     const val DOTENV = "2.4.1"
+    const val SPRINGFOX = "3.0.0"
     const val SPRING_DEPENDENCY_MANAGEMENT = "1.0.11.RELEASE"
     const val LIQUIBASE_CORE = "4.6.2"
     const val KOTLIN_LOGGING_JVM = "2.1.21"

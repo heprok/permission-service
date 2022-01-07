@@ -6,7 +6,7 @@ build/
 !**/src/test/**/build/
 
 ### dotenv ###
-src/main/resources/.env
+api/src/main/resources/.env
 
 ### STS ###
 .apt_generated
