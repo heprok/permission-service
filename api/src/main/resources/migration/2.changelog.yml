@@ -7,23 +7,8 @@ databaseChangeLog:
             tableName: permission_role
             columns:
               - column:
-                  name: name
-                  value: Owner
-              - column:
-                  name: level
+                  name: id
                   value: 1
-        - insert:
-            tableName: permission_role
-            columns:
-              - column:
-                  name: name
-                  value: Owner
-              - column:
-                  name: level
-                  value: 1
-        - insert:
-            tableName: permission_role
-            columns:
               - column:
                   name: name
                   value: Owner
@@ -34,18 +19,162 @@ databaseChangeLog:
             tableName: permission_role
             columns:
               - column:
+                  name: id
+                  value: 2
+              - column:
                   name: name
-                  value: Owner
+                  value: Admin
               - column:
                   name: level
-                  value: 1
+                  value: 2
         - insert:
             tableName: permission_role
             columns:
               - column:
+                  name: id
+                  value: 3
+              - column:
                   name: name
-                  value: Owner
+                  value: Superuser
               - column:
                   name: level
+                  value: 3
+        - insert:
+            tableName: permission_role
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: name
+                  value: Employee
+              - column:
+                  name: level
+                  value: 4
+        - insert:
+            tableName: permission_right
+            columns:
+              - column:
+                  name: id
                   value: 1
+              - column:
+                  name: name
+                  value: Set other owner
+        - insert:
+            tableName: permission_right
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: Set admin
+        - insert:
+            tableName: permission_right
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: Set superuser
+        - insert:
+            tableName: permission_right
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: name
+                  value: Edit company profile
+        - insert:
+            tableName: permission_right
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: name
+                  value: Verify collegue
+        - insert:
+            tableName: permission_right
+            columns:
+              - column:
+                  name: id
+                  value: 6
+              - column:
+                  name: name
+                  value: Company connection CRUD
+        - insert:
+            tableName: permission_right
+            columns:
+              - column:
+                  name: id
+                  value: 7
+              - column:
+                  name: name
+                  value: Companyservice CRUD
+        - insert:
+            tableName: access_object_type
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: Company
+        - insert:
+            tableName: access_object_type
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: Companyservice
+
+        # Default permission right for company and role is Owner
+        - sql:
+            sql: "INSERT INTO default_permission_right VALUES 
+                    (uuid_generate_v4(), 1, 1, 1, true, false),
+                    (uuid_generate_v4(), 1, 2, 1, true, false),
+                    (uuid_generate_v4(), 1, 3, 1, true, false),
+                    (uuid_generate_v4(), 1, 4, 1, true, false),
+                    (uuid_generate_v4(), 1, 5, 1, true, false),
+                    (uuid_generate_v4(), 1, 6, 1, true, false),
+                    (uuid_generate_v4(), 1, 7, 1, true, false);
+            "
+        # Default permission right for company and role is Admin
+        - sql:
+            sql: "INSERT INTO default_permission_right VALUES 
+                    (uuid_generate_v4(), 2, 1, 1, false, false),
+                    (uuid_generate_v4(), 2, 2, 1, false, false),
+                    (uuid_generate_v4(), 2, 3, 1, true, false),
+                    (uuid_generate_v4(), 2, 4, 1, true, false),
+                    (uuid_generate_v4(), 2, 5, 1, true, false),
+                    (uuid_generate_v4(), 2, 6, 1, true, false),
+                    (uuid_generate_v4(), 2, 7, 1, true, false);
+            "
+        # Default permission right for company and role is Superuser
+        - sql:
+            sql: "INSERT INTO default_permission_right VALUES 
+                    (uuid_generate_v4(), 3, 1, 1, false, false),
+                    (uuid_generate_v4(), 3, 2, 1, false, false),
+                    (uuid_generate_v4(), 3, 3, 1, false, false),
+                    (uuid_generate_v4(), 3, 4, 1, false, true),
+                    (uuid_generate_v4(), 3, 5, 1, true, true),
+                    (uuid_generate_v4(), 3, 6, 1, true, true),
+                    (uuid_generate_v4(), 3, 7, 1, true, true);
+            "
+        # Default permission right for company and role is Employee
+        - sql:
+            sql: "INSERT INTO default_permission_right VALUES 
+                    (uuid_generate_v4(), 4, 1, 1, false, false),
+                    (uuid_generate_v4(), 4, 2, 1, false, false),
+                    (uuid_generate_v4(), 4, 3, 1, false, false),
+                    (uuid_generate_v4(), 4, 4, 1, false, false),
+                    (uuid_generate_v4(), 4, 5, 1, true, false),
+                    (uuid_generate_v4(), 4, 6, 1, false, false),
+                    (uuid_generate_v4(), 4, 7, 1, false, false);
+            "
 
