@@ -140,3 +140,17 @@ databaseChangeLog:
                     foreignKeyName: fk_user_permission_right_permission_right_id
                     references: permission_right(id)
                     nullable: false
+              - column:
+                  name: enabled
+                  type: boolean
+                  constraints:
+                    nullable: false
+        - createIndex:
+            tableName: user_permission_role
+            indexName: uniq_user_permission_role_user_id_access_object_uuid
+            unique: true
+            columns:
+              - column:
+                  name: access_object_uuid
+              - column:
+                  name: user_uuid

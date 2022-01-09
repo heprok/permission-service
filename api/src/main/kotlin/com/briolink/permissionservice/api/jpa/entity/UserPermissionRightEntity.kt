@@ -21,7 +21,7 @@ class UserPermissionRightEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_role_uuid", nullable = false)
-    var userRoleUuid: UserPermissionRoleEntity? = null
+    var userRole: UserPermissionRoleEntity? = null
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "right_id", nullable = false)

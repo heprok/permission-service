@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm") version Versions.KOTLIN apply false
     kotlin("kapt") version Versions.KOTLIN apply false
     kotlin("plugin.spring") version Versions.KOTLIN apply false
+    kotlin("plugin.allopen") version Versions.KOTLIN apply false
 }
 
 repositories {
