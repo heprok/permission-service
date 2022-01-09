@@ -19,7 +19,7 @@ class UserPermissionRoleService(
     private val accessObjectTypeRepository: AccessObjectTypeRepository,
     private val permissionRoleRepository: PermissionRoleRepository,
 ) {
-    fun create(
+    private fun create(
         userId: UUID,
         permissionRoleEntity: PermissionRoleEntity,
         accessObjectTypeEntity: AccessObjectTypeEntity,
@@ -33,7 +33,7 @@ class UserPermissionRoleService(
             userPermissionRoleRepository.save(this)
         }
 
-    fun create(
+    private fun create(
         userId: UUID,
         permissionRoleId: Int,
         accessObjectTypeId: Int,
@@ -45,6 +45,15 @@ class UserPermissionRoleService(
             .orElseThrow { throw EntityNotFoundException("Access object type with id $accessObjectTypeId not found") }
 
         return create(userId, permissionRoleEntity, accessObjectTypeEntity, accessObjectId)
+    }
+
+    fun findOrCreate(
+        userId: UUID,
+        permissionRoleId: Int,
+        accessObjectTypeId: Int,
+        accessObjectId: UUID,
+    ): UserPermissionRoleEntity = find(userId, accessObjectId).orElseGet {
+        create(userId, permissionRoleId, accessObjectTypeId, accessObjectId)
     }
 
     fun find(userId: UUID, accessObjectId: UUID): Optional<UserPermissionRoleEntity> =

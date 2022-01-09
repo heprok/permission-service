@@ -6,14 +6,26 @@ import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import javax.persistence.EntityNotFoundException
+import javax.validation.ConstraintViolationException
 
 @ControllerAdvice
 class RestGlobalExceptionHandler(
     private val localeMessage: LocaleMessage
 ) {
-    @ExceptionHandler(value = [ExistsUserIdAndAccessObjectIdException::class])
-    fun existsUserIdAndAccessObjectException(ex: ExistsUserIdAndAccessObjectIdException): ResponseEntity<*> {
+    @ExceptionHandler(
+        value = [
+            ExistsUserIdAndAccessObjectIdException::class,
+            ExistsUserIdAndAccessObjectIdAndRightIdException::class
+        ]
+    )
+    fun existsUserIdAndAccessObjectException(ex: Exception): ResponseEntity<*> {
         return ResponseEntity(ex.message, HttpStatus.CONFLICT)
+    }
+
+    @ExceptionHandler(value = [EntityNotFoundException::class])
+    fun notFoundException(ex: EntityNotFoundException): ResponseEntity<Any> {
+        return ResponseEntity(ex.message, HttpStatus.NOT_FOUND)
     }
 
     @ExceptionHandler(value = [BindException::class])
@@ -23,5 +35,10 @@ class RestGlobalExceptionHandler(
             it.field + ": " + it.defaultMessage?.let { key -> localeMessage.getMessage(key) }
         }
         return ResponseEntity(msg, HttpStatus.NOT_ACCEPTABLE)
+    }
+
+    @ExceptionHandler(value = [ConstraintViolationException::class])
+    fun validationException(ex: ConstraintViolationException): ResponseEntity<Any> {
+        return ResponseEntity(ex.message, HttpStatus.NOT_ACCEPTABLE)
     }
 }

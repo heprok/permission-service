@@ -21,19 +21,19 @@ class DefaultPermissionRightEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_role_id", nullable = false)
-    var userRole: PermissionRoleEntity? = null
+    lateinit var userRole: PermissionRoleEntity
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "right_id", nullable = false)
-    var right: PermissionRightEntity? = null
+    lateinit var right: PermissionRightEntity
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "access_object_type_id", nullable = false)
-    var accessObjectType: AccessObjectTypeEntity? = null
+    lateinit var accessObjectType: AccessObjectTypeEntity
 
     @Column(name = "enabled", nullable = false)
-    var enabled: Boolean? = false
+    var enabled: Boolean = false
 
     @Column(name = "configurable", nullable = false)
-    var configurable: Boolean? = false
+    var configurable: Boolean = false
 }

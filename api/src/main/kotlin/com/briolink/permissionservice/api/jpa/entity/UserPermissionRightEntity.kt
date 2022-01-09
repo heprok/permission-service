@@ -21,11 +21,11 @@ class UserPermissionRightEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_role_uuid", nullable = false)
-    var userRole: UserPermissionRoleEntity? = null
+    lateinit var userRole: UserPermissionRoleEntity
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "right_id", nullable = false)
-    var right: PermissionRightEntity? = null
+    lateinit var right: PermissionRightEntity
 
     @Column(name = "enabled", nullable = false)
     var enabled: Boolean? = false

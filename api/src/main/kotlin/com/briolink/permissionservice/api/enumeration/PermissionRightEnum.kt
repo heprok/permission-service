@@ -10,4 +10,9 @@ enum class PermissionRightEnum(@JsonValue val id: Int) {
     VerifyCollegue(5),
     ConnectionCrud(6),
     ServiceCrud(7);
+
+    companion object {
+        private val map = values().associateBy(PermissionRightEnum::id)
+        fun ofId(id: Int): PermissionRightEnum = map[id]!!
+    }
 }

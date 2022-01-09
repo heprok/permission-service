@@ -12,6 +12,7 @@ class SwaggerConfig {
     @Bean
     fun api(): Docket {
         return Docket(DocumentationType.SWAGGER_2)
+            .useDefaultResponseMessages(false)
             .select()
             .apis(RequestHandlerSelectors.basePackage("com.briolink.permissionservice.api.controller"))
             .paths(PathSelectors.any())

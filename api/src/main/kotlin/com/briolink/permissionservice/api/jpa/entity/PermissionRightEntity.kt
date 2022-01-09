@@ -16,7 +16,7 @@ class PermissionRightEntity {
     var id: Int? = null
 
     @Column(name = "name", nullable = false, length = 100)
-    var name: String? = null
+    lateinit var name: String
 
     companion object {
         fun fromEnum(permissionRightEnum: PermissionRightEnum) = PermissionRightEntity().apply {

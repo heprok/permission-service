@@ -21,17 +21,17 @@ class UserPermissionRoleEntity {
 
     @Column(name = "user_uuid", nullable = false)
     @Type(type = "pg-uuid")
-    var userId: UUID? = null
+    lateinit var userId: UUID
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "role_id", nullable = false)
-    var role: PermissionRoleEntity? = null
+    lateinit var role: PermissionRoleEntity
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "access_object_type_id", nullable = false)
-    var accessObjectType: AccessObjectTypeEntity? = null
+    lateinit var accessObjectType: AccessObjectTypeEntity
 
     @Column(name = "access_object_uuid", nullable = false)
     @Type(type = "pg-uuid")
-    var accessObjectId: UUID? = null
+    lateinit var accessObjectId: UUID
 }

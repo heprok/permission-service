@@ -15,8 +15,8 @@ class PermissionRoleEntity {
     var id: Int? = null
 
     @Column(name = "name", nullable = false, length = 50)
-    var name: String? = null
+    lateinit var name: String
 
     @Column(name = "level", nullable = false)
-    var level: Int? = null
+    var level: Int = 4
 }
