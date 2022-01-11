@@ -47,22 +47,18 @@ class UserPermissionRightController(
     @ApiOperation("Get enabled user permission rights by user Id and object id")
     @Throws(PermissionRightNotFoundException::class)
     fun get(
-        @NotNull @ValidUUID @ApiParam(
-            value = "User id",
-            example = "5332b172-d84c-4643-9b16-98366bb03e22",
-            required = true
-        )
+        @NotNull @ValidUUID @ApiParam(value = "User id", example = "5332b172-d84c-4643-9b16-98366bb03e22", required = true)
         userId: String,
         @NotNull @ValidUUID @ApiParam(value = "Object id", example = "d0a2312e-2d63-4404-b215-7ef94bebdc5c")
         accessObjectId: String,
     ): List<UserPermissionRightEntity> =
         userPermissionRightService.findByUserIdAndAccessObjectIdAndEnabled(
             UUID.fromString(userId),
-            UUID.fromString(accessObjectId)
+            UUID.fromString(accessObjectId),
         ).also {
             if (it.isEmpty()) throw PermissionRightNotFoundException(
                 UUID.fromString(userId),
-                UUID.fromString(accessObjectId)
+                UUID.fromString(accessObjectId),
             )
         }
 
@@ -81,7 +77,7 @@ class UserPermissionRightController(
                 userId = userId,
                 accessObjectId = accessObjectId,
                 accessObjectTypeEnum = accessObjectType,
-                permissionRoleEnum = permissionRole
+                permissionRoleEnum = permissionRole,
             )
         }
     }
@@ -90,11 +86,7 @@ class UserPermissionRightController(
     @PutMapping("/")
     @ApiOperation("Enable user permission right by user id and object id")
     fun enabled(
-        @NotNull @ValidUUID @ApiParam(
-            value = "User id",
-            example = "5332b172-d84c-4643-9b16-98366bb03e22",
-            required = true
-        )
+        @NotNull @ValidUUID @ApiParam(value = "User id", example = "5332b172-d84c-4643-9b16-98366bb03e22", required = true)
         userId: String,
         @NotNull @ValidUUID @ApiParam(value = "Object id", example = "d0a2312e-2d63-4404-b215-7ef94bebdc5c")
         accessObjectId: String,
@@ -109,8 +101,8 @@ class UserPermissionRightController(
             UUID.fromString(userId),
             UUID.fromString(accessObjectId),
             permissionRight,
-            enabled
+            enabled,
         ),
-        HttpStatus.OK
+        HttpStatus.OK,
     )
 }

@@ -12,7 +12,7 @@ class DefaultPermissionRightService(
     fun findAllByTypeIdAndRoleId(accessObjectTypeEnum: AccessObjectTypeEnum, permissionRoleEnum: PermissionRoleEnum) =
         defaultPermissionRightRepository.findByRightIdAndAccessObjectTypeId(
             roleId = permissionRoleEnum.id,
-            accessObjectTypeId = accessObjectTypeEnum.id
+            accessObjectTypeId = accessObjectTypeEnum.id,
         )
 
     fun isConfigurableRightByPermissionRole(permissionRightId: Int, permissionRoleId: Int): Boolean =

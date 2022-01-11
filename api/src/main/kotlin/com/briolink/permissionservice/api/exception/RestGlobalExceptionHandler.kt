@@ -16,8 +16,8 @@ class RestGlobalExceptionHandler(
     @ExceptionHandler(
         value = [
             ExistsUserIdAndAccessObjectIdException::class,
-            ExistsUserIdAndAccessObjectIdAndRightIdException::class
-        ]
+            ExistsUserIdAndAccessObjectIdAndRightIdException::class,
+        ],
     )
     fun existsUserIdAndAccessObjectException(ex: Exception): ResponseEntity<*> {
         return ResponseEntity(ex.message, HttpStatus.CONFLICT)

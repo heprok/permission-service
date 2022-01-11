@@ -1,5 +1,6 @@
 package com.briolink.permissionservice.api.service
 
+import com.briolink.permissionservice.api.enumeration.AccessObjectTypeEnum
 import com.briolink.permissionservice.api.jpa.entity.AccessObjectTypeEntity
 import com.briolink.permissionservice.api.jpa.entity.PermissionRoleEntity
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRoleEntity
@@ -58,4 +59,7 @@ class UserPermissionRoleService(
 
     fun find(userId: UUID, accessObjectId: UUID): Optional<UserPermissionRoleEntity> =
         userPermissionRoleRepository.findByUserIdAndAccessObjectId(userId, accessObjectId)
+
+    fun delete(userId: UUID, accessObjectType: AccessObjectTypeEnum, accessObjectId: UUID): Long =
+        userPermissionRoleRepository.deleteByUserIdAndAccessObjectTypeIdAndAccessObjectId(userId, accessObjectType.id, accessObjectId)
 }

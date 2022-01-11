@@ -36,7 +36,7 @@ class UserPermissionRightService(
             throw ExistsUserIdAndAccessObjectIdException(userId, accessObjectId)
 
         val userPermissionRoleEntity = userPermissionRoleService.findOrCreate(
-            userId, permissionRoleEnum.id, accessObjectTypeEnum.id, accessObjectId
+            userId, permissionRoleEnum.id, accessObjectTypeEnum.id, accessObjectId,
         )
 
         return defaultPermissionRightService.findAllByTypeIdAndRoleId(accessObjectTypeEnum, permissionRoleEnum)
@@ -44,7 +44,7 @@ class UserPermissionRightService(
                 create(
                     userPermissionRoleEntity = userPermissionRoleEntity,
                     permissionRightEntity = it.right,
-                    enabled = it.enabled
+                    enabled = it.enabled,
                 )
             }
     }
@@ -60,7 +60,7 @@ class UserPermissionRightService(
         accessObjectId: UUID,
         permissionRightEnum: PermissionRightEnum
     ): Optional<UserPermissionRightEntity> = userPermissionRightRepository.findByUserIdAndAccessObjectIdAndRightId(
-        userId, accessObjectId, permissionRightEnum.id
+        userId, accessObjectId, permissionRightEnum.id,
     )
 
 //    @Throws(ExistsUserIdAndAccessObjectIdAndRightIdException::class, EntityNotFoundException::class)
@@ -89,12 +89,12 @@ class UserPermissionRightService(
         if (existsByUserIdAndAccessObjectIdAndRightId(
                 userPermissionRoleEntity.userId,
                 userPermissionRoleEntity.accessObjectId,
-                PermissionRightEnum.ofId(permissionRightEntity.id!!)
+                PermissionRightEnum.ofId(permissionRightEntity.id!!),
             )
         ) throw ExistsUserIdAndAccessObjectIdAndRightIdException(
             userPermissionRoleEntity.userId,
             userPermissionRoleEntity.accessObjectId,
-            PermissionRightEnum.ofId(permissionRightEntity.id!!)
+            PermissionRightEnum.ofId(permissionRightEntity.id!!),
         )
 
         UserPermissionRightEntity().apply {
@@ -113,7 +113,7 @@ class UserPermissionRightService(
         accessObjectId: UUID,
         permissionRightEnum: PermissionRightEnum
     ): Boolean = userPermissionRightRepository.existsByUserIdAndAccessObjectIdAndRightId(
-        userId, accessObjectId, permissionRightEnum.id
+        userId, accessObjectId, permissionRightEnum.id,
     )
 
     @Throws(PermissionRightDontConfigurableException::class, PermissionRightNotFoundException::class)
@@ -126,13 +126,13 @@ class UserPermissionRightService(
         findByUserIdAndAccessObjectIdAndRightId(
             userId,
             accessObjectId,
-            permissionRight
+            permissionRight,
         ).orElseThrow { throw PermissionRightNotFoundException(userId, accessObjectId, permissionRight) }.apply {
             if (!defaultPermissionRightService.isConfigurableRightByPermissionRole(
-                    permissionRight.id, userRole.role.id!!
+                    permissionRight.id, userRole.role.id!!,
                 )
             ) throw PermissionRightDontConfigurableException(
-                permissionRight, PermissionRoleEnum.ofId(userRole.role.id!!)
+                permissionRight, PermissionRoleEnum.ofId(userRole.role.id!!),
             )
             this.enabled = enabled
             return userPermissionRightRepository.save(this)
