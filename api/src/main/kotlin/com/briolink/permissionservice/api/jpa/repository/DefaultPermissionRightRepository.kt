@@ -11,4 +11,9 @@ interface DefaultPermissionRightRepository : JpaRepository<DefaultPermissionRigh
         roleId: Int,
         accessObjectTypeId: Int
     ): List<DefaultPermissionRightEntity>
+
+//    @Query("SELECT d.configurable FROM DefaultPermissionRightEntity d WHERE d.rightId")
+
+    @Query("SELECT d.configurable FROM DefaultPermissionRightEntity d WHERE d.right.id = ?1 AND d.userRole.id = ?2")
+    fun isConfigurableByRightIdAndPermissionRoleId(permissionRightId: Int, permissionRoleId: Int): Boolean
 }

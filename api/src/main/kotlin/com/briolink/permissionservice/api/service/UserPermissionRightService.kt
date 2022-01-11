@@ -5,21 +5,22 @@ import com.briolink.permissionservice.api.enumeration.PermissionRightEnum
 import com.briolink.permissionservice.api.enumeration.PermissionRoleEnum
 import com.briolink.permissionservice.api.exception.ExistsUserIdAndAccessObjectIdAndRightIdException
 import com.briolink.permissionservice.api.exception.ExistsUserIdAndAccessObjectIdException
+import com.briolink.permissionservice.api.exception.PermissionRightDontConfigurableException
+import com.briolink.permissionservice.api.exception.PermissionRightNotFoundException
 import com.briolink.permissionservice.api.jpa.entity.PermissionRightEntity
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRightEntity
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRoleEntity
 import com.briolink.permissionservice.api.jpa.repository.UserPermissionRightRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.Optional
 import java.util.UUID
-import javax.persistence.EntityNotFoundException
 
 @Service
 @Transactional
 class UserPermissionRightService(
     private val userPermissionRightRepository: UserPermissionRightRepository,
     private val userPermissionRoleService: UserPermissionRoleService,
-    private val permissionRightService: PermissionRightService,
     private val defaultPermissionRightService: DefaultPermissionRightService,
 ) {
 
@@ -48,29 +49,37 @@ class UserPermissionRightService(
             }
     }
 
-    fun findByUserIdAndAccessObjectId(
+    fun findByUserIdAndAccessObjectIdAndEnabled(
         userId: UUID,
         accessObjectId: UUID
     ): List<UserPermissionRightEntity> =
-        userPermissionRightRepository.findByUserIdAndAccessObjectId(userId, accessObjectId)
+        userPermissionRightRepository.findByUserIdAndAccessObjectIdAndEnabled(userId, accessObjectId)
 
-    @Throws(ExistsUserIdAndAccessObjectIdAndRightIdException::class, EntityNotFoundException::class)
-    fun create(
+    fun findByUserIdAndAccessObjectIdAndRightId(
         userId: UUID,
         accessObjectId: UUID,
-        accessObjectTypeEnum: AccessObjectTypeEnum,
-        permissionRoleEnum: PermissionRoleEnum,
-        permissionRightEnum: PermissionRightEnum,
-    ): UserPermissionRightEntity {
-        val userPermissionRoleEntity = userPermissionRoleService.findOrCreate(
-            userId, permissionRoleEnum.id, accessObjectTypeEnum.id, accessObjectId
-        )
+        permissionRightEnum: PermissionRightEnum
+    ): Optional<UserPermissionRightEntity> = userPermissionRightRepository.findByUserIdAndAccessObjectIdAndRightId(
+        userId, accessObjectId, permissionRightEnum.id
+    )
 
-        val permissionRightEntity = permissionRightService.findById(permissionRightEnum.id)
-            .orElseThrow { throw EntityNotFoundException("Permission right with id ${permissionRightEnum.id} not found") }
-
-        return create(userPermissionRoleEntity, permissionRightEntity, true)
-    }
+//    @Throws(ExistsUserIdAndAccessObjectIdAndRightIdException::class, EntityNotFoundException::class)
+//    fun create(
+//        userId: UUID,
+//        accessObjectId: UUID,
+//        accessObjectTypeEnum: AccessObjectTypeEnum,
+//        permissionRoleEnum: PermissionRoleEnum,
+//        permissionRightEnum: PermissionRightEnum,
+//    ): UserPermissionRightEntity {
+//        val userPermissionRoleEntity = userPermissionRoleService.findOrCreate(
+//            userId, permissionRoleEnum.id, accessObjectTypeEnum.id, accessObjectId
+//        )
+//
+//        val permissionRightEntity = permissionRightService.findById(permissionRightEnum.id)
+//            .orElseThrow { throw EntityNotFoundException("Permission right with id ${permissionRightEnum.id} not found") }
+//
+//        return create(userPermissionRoleEntity, permissionRightEntity, true)
+//    }
 
     private fun create(
         userPermissionRoleEntity: UserPermissionRoleEntity,
@@ -103,10 +112,30 @@ class UserPermissionRightService(
         userId: UUID,
         accessObjectId: UUID,
         permissionRightEnum: PermissionRightEnum
-    ): Boolean =
-        userPermissionRightRepository.existsByUserIdAndAccessObjectIdAndRightId(
+    ): Boolean = userPermissionRightRepository.existsByUserIdAndAccessObjectIdAndRightId(
+        userId, accessObjectId, permissionRightEnum.id
+    )
+
+    @Throws(PermissionRightDontConfigurableException::class, PermissionRightNotFoundException::class)
+    fun enablePermissionRight(
+        userId: UUID,
+        accessObjectId: UUID,
+        permissionRight: PermissionRightEnum,
+        enabled: Boolean
+    ): UserPermissionRightEntity {
+        findByUserIdAndAccessObjectIdAndRightId(
             userId,
             accessObjectId,
-            permissionRightEnum.id
-        )
+            permissionRight
+        ).orElseThrow { throw PermissionRightNotFoundException(userId, accessObjectId, permissionRight) }.apply {
+            if (!defaultPermissionRightService.isConfigurableRightByPermissionRole(
+                    permissionRight.id, userRole.role.id!!
+                )
+            ) throw PermissionRightDontConfigurableException(
+                permissionRight, PermissionRoleEnum.ofId(userRole.role.id!!)
+            )
+            this.enabled = enabled
+            return userPermissionRightRepository.save(this)
+        }
+    }
 }

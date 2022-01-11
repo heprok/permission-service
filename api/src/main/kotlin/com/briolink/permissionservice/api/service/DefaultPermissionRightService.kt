@@ -14,4 +14,7 @@ class DefaultPermissionRightService(
             roleId = permissionRoleEnum.id,
             accessObjectTypeId = accessObjectTypeEnum.id
         )
+
+    fun isConfigurableRightByPermissionRole(permissionRightId: Int, permissionRoleId: Int): Boolean =
+        defaultPermissionRightRepository.isConfigurableByRightIdAndPermissionRoleId(permissionRightId, permissionRoleId)
 }

@@ -7,4 +7,9 @@ enum class PermissionRoleEnum(@JsonValue val id: Int) {
     Admin(2),
     Superuser(3),
     Employee(4);
+
+    companion object {
+        private val map = values().associateBy(PermissionRoleEnum::id)
+        fun ofId(id: Int): PermissionRoleEnum = map[id]!!
+    }
 }

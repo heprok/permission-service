@@ -1,9 +1,10 @@
 package com.briolink.permissionservice.api.controller
 
 import com.briolink.permissionservice.api.dto.DefaultPermissionRightDto
-import com.briolink.permissionservice.api.dto.UserPermissionRightDto
-import com.briolink.permissionservice.api.exception.ExistsUserIdAndAccessObjectIdAndRightIdException
+import com.briolink.permissionservice.api.enumeration.PermissionRightEnum
 import com.briolink.permissionservice.api.exception.ExistsUserIdAndAccessObjectIdException
+import com.briolink.permissionservice.api.exception.PermissionRightDontConfigurableException
+import com.briolink.permissionservice.api.exception.PermissionRightNotFoundException
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRightEntity
 import com.briolink.permissionservice.api.service.UserPermissionRightService
 import com.briolink.permissionservice.api.validation.ValidUUID
@@ -18,11 +19,11 @@ import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
-import javax.persistence.EntityNotFoundException
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
@@ -43,8 +44,8 @@ class UserPermissionRightController(
 ) {
 
     @GetMapping("/")
-    @ApiOperation("User permission right by user Id and object id")
-    @Throws(EntityNotFoundException::class)
+    @ApiOperation("Get enabled user permission rights by user Id and object id")
+    @Throws(PermissionRightNotFoundException::class)
     fun get(
         @NotNull @ValidUUID @ApiParam(
             value = "User id",
@@ -55,39 +56,21 @@ class UserPermissionRightController(
         @NotNull @ValidUUID @ApiParam(value = "Object id", example = "d0a2312e-2d63-4404-b215-7ef94bebdc5c")
         accessObjectId: String,
     ): List<UserPermissionRightEntity> =
-        userPermissionRightService.findByUserIdAndAccessObjectId(
+        userPermissionRightService.findByUserIdAndAccessObjectIdAndEnabled(
             UUID.fromString(userId),
             UUID.fromString(accessObjectId)
         ).also {
-            if (it.isEmpty()) throw EntityNotFoundException("User permission right not found")
-        }
-
-    @PostMapping("/")
-    @Throws(ExistsUserIdAndAccessObjectIdAndRightIdException::class, EntityNotFoundException::class)
-    fun create(
-        @Valid @RequestBody dto: UserPermissionRightDto
-    ): ResponseEntity<UserPermissionRightEntity> {
-        with(dto) {
-            if (userId == null || accessObjectType == null || permissionRole == null || accessObjectId == null || permissionRight == null)
-                throw RuntimeException("Properties must be not null in permissionRightDto")
-
-            return ResponseEntity(
-                userPermissionRightService.create(
-                    userId = userId,
-                    accessObjectId = accessObjectId,
-                    accessObjectTypeEnum = accessObjectType,
-                    permissionRoleEnum = permissionRole,
-                    permissionRightEnum = permissionRight
-                ),
-                HttpStatus.CREATED
+            if (it.isEmpty()) throw PermissionRightNotFoundException(
+                UUID.fromString(userId),
+                UUID.fromString(accessObjectId)
             )
         }
-    }
 
     @Throws(ExistsUserIdAndAccessObjectIdException::class)
-    @PostMapping("/default/")
+    @PostMapping("/")
+    @ApiOperation("Create user permission rights from template")
     @ResponseStatus(HttpStatus.CREATED)
-    fun createDefault(
+    fun create(
         @Valid @RequestBody dto: DefaultPermissionRightDto
     ): List<UserPermissionRightEntity> {
         with(dto) {
@@ -102,4 +85,32 @@ class UserPermissionRightController(
             )
         }
     }
+
+    @Throws(PermissionRightDontConfigurableException::class, PermissionRightNotFoundException::class)
+    @PutMapping("/")
+    @ApiOperation("Enable user permission right by user id and object id")
+    fun enabled(
+        @NotNull @ValidUUID @ApiParam(
+            value = "User id",
+            example = "5332b172-d84c-4643-9b16-98366bb03e22",
+            required = true
+        )
+        userId: String,
+        @NotNull @ValidUUID @ApiParam(value = "Object id", example = "d0a2312e-2d63-4404-b215-7ef94bebdc5c")
+        accessObjectId: String,
+        @NotNull(message = "permission-right.permission-right.not-null")
+        @ApiParam(value = "Permission right", required = true)
+        permissionRight: PermissionRightEnum,
+        @NotNull(message = "permission-right.enabled.not-null")
+        @ApiParam(value = "Enabled", required = true)
+        enabled: Boolean
+    ) = ResponseEntity<UserPermissionRightEntity>(
+        userPermissionRightService.enablePermissionRight(
+            UUID.fromString(userId),
+            UUID.fromString(accessObjectId),
+            permissionRight,
+            enabled
+        ),
+        HttpStatus.OK
+    )
 }
