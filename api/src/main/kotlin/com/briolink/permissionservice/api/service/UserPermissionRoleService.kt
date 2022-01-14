@@ -1,6 +1,9 @@
 package com.briolink.permissionservice.api.service
 
 import com.briolink.permissionservice.api.enumeration.AccessObjectTypeEnum
+import com.briolink.permissionservice.api.enumeration.PermissionRoleEnum
+import com.briolink.permissionservice.api.exception.notfound.AccessObjectTypeNotFoundException
+import com.briolink.permissionservice.api.exception.notfound.PermissionRoleNotFoundException
 import com.briolink.permissionservice.api.jpa.entity.AccessObjectTypeEntity
 import com.briolink.permissionservice.api.jpa.entity.PermissionRoleEntity
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRoleEntity
@@ -11,7 +14,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.Optional
 import java.util.UUID
-import javax.persistence.EntityNotFoundException
 
 @Service
 @Transactional
@@ -19,6 +21,7 @@ class UserPermissionRoleService(
     private val userPermissionRoleRepository: UserPermissionRoleRepository,
     private val accessObjectTypeRepository: AccessObjectTypeRepository,
     private val permissionRoleRepository: PermissionRoleRepository,
+    private val userPermissionRightService: UserPermissionRightService,
 ) {
     private fun create(
         userId: UUID,
@@ -41,12 +44,22 @@ class UserPermissionRoleService(
         accessObjectId: UUID,
     ): UserPermissionRoleEntity {
         val permissionRoleEntity = permissionRoleRepository.findById(permissionRoleId)
-            .orElseThrow { throw EntityNotFoundException("Permission right with id $permissionRoleId not found") }
+            .orElseThrow { throw PermissionRoleNotFoundException() }
         val accessObjectTypeEntity = accessObjectTypeRepository.findById(accessObjectTypeId)
-            .orElseThrow { throw EntityNotFoundException("Access object type with id $accessObjectTypeId not found") }
+            .orElseThrow { throw AccessObjectTypeNotFoundException() }
 
         return create(userId, permissionRoleEntity, accessObjectTypeEntity, accessObjectId)
     }
+
+    fun createWithRightFromTemplate(
+        userId: UUID,
+        permissionRole: PermissionRoleEnum,
+        accessObjectType: AccessObjectTypeEnum,
+        accessObjectId: UUID,
+    ): UserPermissionRoleEntity =
+        findOrCreate(userId, permissionRole.id, accessObjectType.id, accessObjectId).also {
+            userPermissionRightService.createFromDefault(it)
+        }
 
     fun findOrCreate(
         userId: UUID,

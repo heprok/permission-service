@@ -15,7 +15,15 @@ interface UserPermissionRightRepository : JpaRepository<UserPermissionRightEntit
     fun existsByUserIdAndAccessObjectIdAndRightId(
         userId: UUID,
         accessObjectId: UUID,
-        rightId: Int
+        rightId: Int,
+    ): Boolean
+
+    @Query("SELECT (count(u) > 0) FROM UserPermissionRightEntity u WHERE u.userRole.userId = ?1 AND u.userRole.accessObjectId = ?2 AND u.right.id = ?3 AND u.enabled = ?4") // ktlint-disable max-line-length
+    fun existsByUserIdAndAccessObjectIdAndRightIdAndEnabled(
+        userId: UUID,
+        accessObjectId: UUID,
+        rightId: Int,
+        enabled: Boolean
     ): Boolean
 
     @Query("SELECT u FROM UserPermissionRightEntity u WHERE u.userRole.userId = ?1 AND u.userRole.accessObjectId = ?2 AND u.enabled = TRUE")
