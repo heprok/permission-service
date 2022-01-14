@@ -1,6 +1,7 @@
 package com.briolink.permissionservice.api.jpa.repository
 
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRightEntity
+import com.briolink.permissionservice.api.jpa.entity.UserPermissionRoleEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import java.util.Optional
@@ -26,8 +27,12 @@ interface UserPermissionRightRepository : JpaRepository<UserPermissionRightEntit
         enabled: Boolean
     ): Boolean
 
-    @Query("SELECT u FROM UserPermissionRightEntity u WHERE u.userRole.userId = ?1 AND u.userRole.accessObjectId = ?2 AND u.enabled = TRUE")
-    fun findByUserIdAndAccessObjectIdAndEnabled(userId: UUID, accessObjectId: UUID): List<UserPermissionRightEntity>
+    @Query("SELECT u FROM UserPermissionRightEntity u WHERE u.userRole.userId = ?1 AND u.userRole.accessObjectId = ?2 AND u.enabled = ?3")
+    fun findByUserIdAndAccessObjectIdAndEnabled(
+        userId: UUID,
+        accessObjectId: UUID,
+        enabled: Boolean = true
+    ): List<UserPermissionRightEntity>
 
     @Query("SELECT u FROM UserPermissionRightEntity u WHERE u.userRole.userId = ?1 AND u.userRole.accessObjectId = ?2 AND u.right.id = ?3")
     fun findByUserIdAndAccessObjectIdAndRightId(
@@ -35,4 +40,6 @@ interface UserPermissionRightRepository : JpaRepository<UserPermissionRightEntit
         accessObjectId: UUID,
         rightId: Int
     ): Optional<UserPermissionRightEntity>
+
+    fun findByUserRole(userRole: UserPermissionRoleEntity): List<UserPermissionRightEntity>
 }

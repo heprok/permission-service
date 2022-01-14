@@ -7,6 +7,7 @@ import com.briolink.permissionservice.api.exception.PermissionRightNotConfigurab
 import com.briolink.permissionservice.api.exception.exist.PermissionRightExistException
 import com.briolink.permissionservice.api.exception.exist.PermissionRoleExistException
 import com.briolink.permissionservice.api.exception.notfound.PermissionRightNotFoundException
+import com.briolink.permissionservice.api.jpa.entity.DefaultPermissionRightEntity
 import com.briolink.permissionservice.api.jpa.entity.PermissionRightEntity
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRightEntity
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRoleEntity
@@ -57,6 +58,30 @@ class UserPermissionRightService(
         userId, accessObjectId, permissionRightEnum.id,
     )
 
+    fun editRightsFromTemplate(userPermissionRoleEntity: UserPermissionRoleEntity): List<UserPermissionRightEntity> {
+        val mutableListUserPermissionRightEntity = mutableListOf<UserPermissionRightEntity>()
+        val userPermissionRights = userPermissionRightRepository.findByUserRole(userPermissionRoleEntity)
+        val defaultPermissionRights = defaultPermissionRightService.findAllByTypeIdAndRoleId(
+            AccessObjectTypeEnum.ofId(userPermissionRoleEntity.accessObjectType.id!!),
+            PermissionRoleEnum.ofId(userPermissionRoleEntity.role.id!!),
+        )
+        val unListDefaultRights: List<DefaultPermissionRightEntity> = defaultPermissionRights.mapNotNull { defaultRight ->
+            if (userPermissionRights.any { right -> (right.right == defaultRight.right) }) null else defaultRight
+        }
+
+        userPermissionRights.forEach {
+            it.userRole = userPermissionRoleEntity
+            val defaultRight = defaultPermissionRights.find { default -> default.right == it.right }
+            if (defaultRight != null) it.enabled = defaultRight.enabled
+            mutableListUserPermissionRightEntity.add(userPermissionRightRepository.save(it))
+        }
+
+        unListDefaultRights.forEach {
+            mutableListUserPermissionRightEntity.add(create(userPermissionRoleEntity, it.right, it.enabled))
+        }
+
+        return mutableListUserPermissionRightEntity
+    }
 //    @Throws(ExistsUserIdAndAccessObjectIdAndRightIdException::class, EntityNotFoundException::class)
 //    fun create(
 //        userId: UUID,

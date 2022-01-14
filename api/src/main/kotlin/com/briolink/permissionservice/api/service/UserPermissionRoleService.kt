@@ -61,6 +61,22 @@ class UserPermissionRoleService(
             userPermissionRightService.createFromDefault(it)
         }
 
+    @Throws(PermissionRoleNotFoundException::class)
+    fun editRoleAndRightsFromTemplate(
+        userId: UUID,
+        permissionRole: PermissionRoleEnum,
+        accessObjectType: AccessObjectTypeEnum,
+        accessObjectId: UUID,
+    ): UserPermissionRoleEntity {
+        val userPermissionRoleEntity = find(userId, accessObjectId).orElseThrow { throw PermissionRoleNotFoundException() }.let {
+            it.role = permissionRoleRepository.findById(permissionRole.id)
+                .orElseThrow { throw PermissionRoleNotFoundException() }
+            userPermissionRoleRepository.save(it)
+        }
+        userPermissionRightService.editRightsFromTemplate(userPermissionRoleEntity)
+        return userPermissionRoleEntity
+    }
+
     fun findOrCreate(
         userId: UUID,
         permissionRoleId: Int,
