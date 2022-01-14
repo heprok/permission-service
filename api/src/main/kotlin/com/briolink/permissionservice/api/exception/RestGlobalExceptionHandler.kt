@@ -1,31 +1,37 @@
 package com.briolink.permissionservice.api.exception
 
+import com.briolink.permissionservice.api.exception.exist.PermissionRightExistException
+import com.briolink.permissionservice.api.exception.exist.PermissionRoleExistException
 import com.briolink.permissionservice.api.util.LocaleMessage
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.RequestMapping
 import javax.persistence.EntityNotFoundException
 import javax.validation.ConstraintViolationException
 
 @ControllerAdvice
-class RestGlobalExceptionHandler(
-    private val localeMessage: LocaleMessage
-) {
+@RequestMapping(produces = ["application/json"])
+class RestGlobalExceptionHandler(private val localeMessage: LocaleMessage) {
+
+    private fun getResponseEntityWithTranslateMessage(ex: ExceptionInterface) =
+        ResponseEntity<ErrorResponse>(ex.errorResponse.apply { message = localeMessage.getMessage(ex.code) }, ex.httpsStatus)
+
     @ExceptionHandler(
         value = [
-            ExistsUserIdAndAccessObjectIdException::class,
-            ExistsUserIdAndAccessObjectIdAndRightIdException::class,
+            PermissionRoleExistException::class,
+            PermissionRightExistException::class,
         ],
     )
-    fun existsUserIdAndAccessObjectException(ex: Exception): ResponseEntity<*> {
-        return ResponseEntity(ex.message, HttpStatus.CONFLICT)
+    fun existsException(ex: ExceptionInterface): ResponseEntity<ErrorResponse> {
+        return getResponseEntityWithTranslateMessage(ex)
     }
 
-    @ExceptionHandler(value = [EntityNotFoundException::class])
-    fun notFoundException(ex: EntityNotFoundException): ResponseEntity<Any> {
-        return ResponseEntity(ex.message, HttpStatus.NOT_FOUND)
+    @ExceptionHandler(EntityNotFoundException::class)
+    fun notFoundException(ex: ExceptionInterface): ResponseEntity<ErrorResponse> {
+        return getResponseEntityWithTranslateMessage(ex)
     }
 
     @ExceptionHandler(value = [BindException::class])
