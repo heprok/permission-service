@@ -13,5 +13,5 @@ interface UserPermissionRoleRepository : JpaRepository<UserPermissionRoleEntity,
 
     @Modifying
     @Query("DELETE FROM UserPermissionRoleEntity u WHERE u.userId = ?1 AND u.accessObjectType.id = ?2 AND u.accessObjectId = ?3")
-    fun deleteByUserIdAndAccessObjectTypeIdAndAccessObjectId(userId: UUID, accessObjectTypeId: Int, accessObjectId: UUID): Long
+    fun deleteByUserIdAndAccessObjectTypeIdAndAccessObjectId(userId: UUID, accessObjectTypeId: Int, accessObjectId: UUID): Int
 }

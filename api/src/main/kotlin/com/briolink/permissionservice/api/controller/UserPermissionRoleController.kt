@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 import javax.validation.Valid
@@ -58,16 +59,16 @@ class UserPermissionRoleController(
     }
 
     @Throws(UserPermissionRoleNotFoundException::class)
-    @DeleteMapping("/")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation("Delete user permission role by user id and object id, object type ")
+    @DeleteMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
     fun delete(
         @NotNull @ValidUUID @ApiParam(value = "User id", example = "5332b172-d84c-4643-9b16-98366bb03e22", required = true) userId: String,
         @NotNull @ValidUUID @ApiParam(value = "Object id", example = "d0a2312e-2d63-4404-b215-7ef94bebdc5c") accessObjectId: String,
         @NotNull(message = "permission-role.access-object-type.not-null") @ApiParam(value = "Object type", required = true)
         accessObjectType: AccessObjectTypeEnum,
     ) {
-        if (userPermissionRoleService.delete(UUID.fromString(userId), accessObjectType, UUID.fromString(accessObjectId)).toInt() == 0)
+        if (userPermissionRoleService.delete(UUID.fromString(userId), accessObjectType, UUID.fromString(accessObjectId)) == 0)
             throw UserPermissionRoleNotFoundException()
     }
 

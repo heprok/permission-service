@@ -89,6 +89,6 @@ class UserPermissionRoleService(
     fun find(userId: UUID, accessObjectId: UUID): Optional<UserPermissionRoleEntity> =
         userPermissionRoleRepository.findByUserIdAndAccessObjectId(userId, accessObjectId)
 
-    fun delete(userId: UUID, accessObjectType: AccessObjectTypeEnum, accessObjectId: UUID): Long =
+    fun delete(userId: UUID, accessObjectType: AccessObjectTypeEnum, accessObjectId: UUID): Int =
         userPermissionRoleRepository.deleteByUserIdAndAccessObjectTypeIdAndAccessObjectId(userId, accessObjectType.id, accessObjectId)
 }

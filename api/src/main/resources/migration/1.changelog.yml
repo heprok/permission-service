@@ -132,6 +132,7 @@ databaseChangeLog:
                   constraints:
                     foreignKeyName: fk_user_permission_right_user_permission_role_uuid
                     references: user_permission_role(uuid)
+                    deleteCascade: true
                     nullable: false
               - column:
                   name: right_id
@@ -139,6 +140,7 @@ databaseChangeLog:
                   constraints:
                     foreignKeyName: fk_user_permission_right_permission_right_id
                     references: permission_right(id)
+                    deleteCascade: true
                     nullable: false
               - column:
                   name: enabled
