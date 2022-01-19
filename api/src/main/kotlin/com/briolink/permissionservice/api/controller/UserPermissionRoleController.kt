@@ -1,8 +1,8 @@
 package com.briolink.permissionservice.api.controller
 
+import com.briolink.permission.enumeration.AccessObjectTypeEnum
+import com.briolink.permission.exception.notfound.UserPermissionRoleNotFoundException
 import com.briolink.permissionservice.api.dto.DefaultPermissionRightDto
-import com.briolink.permissionservice.api.enumeration.AccessObjectTypeEnum
-import com.briolink.permissionservice.api.exception.notfound.UserPermissionRoleNotFoundException
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRoleEntity
 import com.briolink.permissionservice.api.service.UserPermissionRoleService
 import com.briolink.permissionservice.api.validation.ValidUUID

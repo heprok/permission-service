@@ -1,8 +1,8 @@
 package com.briolink.permissionservice.api.controller
 
-import com.briolink.permissionservice.api.enumeration.PermissionRightEnum
-import com.briolink.permissionservice.api.exception.PermissionRightNotConfigurableException
-import com.briolink.permissionservice.api.exception.notfound.PermissionRightNotFoundException
+import com.briolink.permission.enumeration.PermissionRightEnum
+import com.briolink.permission.exception.PermissionRightNotConfigurableException
+import com.briolink.permission.exception.notfound.PermissionRightNotFoundException
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRightEntity
 import com.briolink.permissionservice.api.service.UserPermissionRightService
 import com.briolink.permissionservice.api.validation.ValidUUID

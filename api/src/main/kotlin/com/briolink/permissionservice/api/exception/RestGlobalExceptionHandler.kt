@@ -1,7 +1,9 @@
 package com.briolink.permissionservice.api.exception
 
-import com.briolink.permissionservice.api.exception.exist.PermissionRightExistException
-import com.briolink.permissionservice.api.exception.exist.PermissionRoleExistException
+import com.briolink.permission.exception.ErrorResponse
+import com.briolink.permission.exception.ExceptionInterface
+import com.briolink.permission.exception.exist.PermissionRightExistException
+import com.briolink.permission.exception.exist.PermissionRoleExistException
 import com.briolink.permissionservice.api.util.LocaleMessage
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

@@ -8,6 +8,7 @@ plugins {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -26,6 +27,8 @@ dependencies {
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
+    // Briolnik permission
+    implementation("com.briolink:permission:0.1.39-SNAPSHOT")
     // SWAGGER
     implementation("io.springfox:springfox-boot-starter:${Versions.SPRINGFOX}")
 

@@ -1,12 +1,12 @@
 package com.briolink.permissionservice.api.service
 
-import com.briolink.permissionservice.api.enumeration.AccessObjectTypeEnum
-import com.briolink.permissionservice.api.enumeration.PermissionRightEnum
-import com.briolink.permissionservice.api.enumeration.PermissionRoleEnum
-import com.briolink.permissionservice.api.exception.PermissionRightNotConfigurableException
-import com.briolink.permissionservice.api.exception.exist.PermissionRightExistException
-import com.briolink.permissionservice.api.exception.exist.PermissionRoleExistException
-import com.briolink.permissionservice.api.exception.notfound.PermissionRightNotFoundException
+import com.briolink.permission.enumeration.AccessObjectTypeEnum
+import com.briolink.permission.enumeration.PermissionRightEnum
+import com.briolink.permission.enumeration.PermissionRoleEnum
+import com.briolink.permission.exception.PermissionRightNotConfigurableException
+import com.briolink.permission.exception.exist.PermissionRightExistException
+import com.briolink.permission.exception.exist.PermissionRoleExistException
+import com.briolink.permission.exception.notfound.PermissionRightNotFoundException
 import com.briolink.permissionservice.api.jpa.entity.DefaultPermissionRightEntity
 import com.briolink.permissionservice.api.jpa.entity.PermissionRightEntity
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRightEntity
