@@ -156,3 +156,23 @@ databaseChangeLog:
                   name: access_object_uuid
               - column:
                   name: user_uuid
+        - createTable:
+            tableName: event_store
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: data
+                  type: jsonb
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false

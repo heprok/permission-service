@@ -9,16 +9,6 @@ plugins {
     kotlin("plugin.allopen") version Versions.KOTLIN apply false
 }
 
-repositories {
-    mavenCentral()
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
-
 allprojects {
     group = "com.briolink"
     version = "1.0.0-SNAPSHOT"
@@ -33,6 +23,26 @@ allprojects {
             freeCompilerArgs = listOf("-Xjsr305=strict")
             jvmTarget = Versions.JAVA.toString()
         }
+    }
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    apply {
+        plugin("kotlin")
+        plugin("io.spring.dependency-management")
+    }
+
+    val implementation by configurations
+
+    dependencies {
+        // Briolnik permission
+        implementation("com.briolink:permission:0.1.45-SNAPSHOT")
+        implementation("me.paulschwarz:spring-dotenv:${Versions.SPRING_DOTENV}")
     }
 }
 

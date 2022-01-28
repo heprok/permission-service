@@ -22,13 +22,13 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     kapt("org.springframework.boot:spring-boot-autoconfigure-processor:${Versions.SPRING_BOOT}")
     kapt("org.springframework.boot:spring-boot-configuration-processor:${Versions.SPRING_BOOT}")
-    implementation("me.paulschwarz:spring-dotenv:${Versions.DOTENV}")
+    // Hibernate Types 55
+    implementation("com.vladmihalcea:hibernate-types-55:${Versions.HIBERNATE_TYPES_55}")
+
     // FasterXML-*
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-    // Briolnik permission
-    implementation("com.briolink:permission:0.1.39-SNAPSHOT")
     // SWAGGER
     implementation("io.springfox:springfox-boot-starter:${Versions.SPRINGFOX}")
 

@@ -30,7 +30,6 @@ import javax.validation.constraints.NotNull
 @ApiResponses(
     ApiResponse(code = 200, message = "Right found"),
     ApiResponse(code = 201, message = "Right created"),
-    ApiResponse(code = 201, message = "Right ss"),
     ApiResponse(code = 204, message = "Right not found"),
     ApiResponse(code = 403, message = "Unauthorized"),
     ApiResponse(code = 406, message = "Properties not valid"),
@@ -46,7 +45,7 @@ class UserPermissionRightController(
     fun get(
         @NotNull @ValidUUID @ApiParam(value = "User id", example = "5332b172-d84c-4643-9b16-98366bb03e22", required = true)
         userId: String,
-        @NotNull @ValidUUID @ApiParam(value = "Object id", example = "d0a2312e-2d63-4404-b215-7ef94bebdc5c")
+        @NotNull @ValidUUID @ApiParam(value = "Object id", example = "d0a2312e-2d63-4404-b215-7ef94bebdc5c", required = true)
         accessObjectId: String,
     ): List<UserPermissionRightEntity> =
         userPermissionRightService.findByUserIdAndAccessObjectIdAndEnabled(

@@ -32,8 +32,8 @@ class UserPermissionRightService(
             throw PermissionRoleExistException()
 
         return defaultPermissionRightService.findAllByTypeIdAndRoleId(
-            AccessObjectTypeEnum.ofId(userPermissionRoleEntity.accessObjectType.id!!),
-            PermissionRoleEnum.ofId(userPermissionRoleEntity.role.id!!),
+            AccessObjectTypeEnum.valueOf(userPermissionRoleEntity.accessObjectType.name),
+            PermissionRoleEnum.valueOf(userPermissionRoleEntity.role.name),
         )
             .map {
                 create(
@@ -62,8 +62,8 @@ class UserPermissionRightService(
         val mutableListUserPermissionRightEntity = mutableListOf<UserPermissionRightEntity>()
         val userPermissionRights = userPermissionRightRepository.findByUserRole(userPermissionRoleEntity)
         val defaultPermissionRights = defaultPermissionRightService.findAllByTypeIdAndRoleId(
-            AccessObjectTypeEnum.ofId(userPermissionRoleEntity.accessObjectType.id!!),
-            PermissionRoleEnum.ofId(userPermissionRoleEntity.role.id!!),
+            AccessObjectTypeEnum.valueOf(userPermissionRoleEntity.accessObjectType.name),
+            PermissionRoleEnum.valueOf(userPermissionRoleEntity.role.name),
         )
         val unListDefaultRights: List<DefaultPermissionRightEntity> = defaultPermissionRights.mapNotNull { defaultRight ->
             if (userPermissionRights.any { right -> (right.right == defaultRight.right) }) null else defaultRight
@@ -108,7 +108,7 @@ class UserPermissionRightService(
         if (existsByUserIdAndAccessObjectIdAndRightId(
                 userPermissionRoleEntity.userId,
                 userPermissionRoleEntity.accessObjectId,
-                PermissionRightEnum.ofId(permissionRightEntity.id!!),
+                PermissionRightEnum.valueOf(permissionRightEntity.name),
             )
         ) throw PermissionRightExistException()
 
