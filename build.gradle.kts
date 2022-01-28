@@ -29,6 +29,7 @@ allprojects {
 subprojects {
     repositories {
         mavenCentral()
+        mavenLocal()
         maven {
             url = uri("https://gitlab.com/api/v4/projects/32844103/packages/maven")
 
