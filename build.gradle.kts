@@ -31,7 +31,7 @@ subprojects {
         mavenCentral()
         mavenLocal()
         maven {
-            url = uri("https://gitlab.com/api/v4/projects/29889174/packages/maven")
+            url = uri("https://gitlab.com/api/v4/projects/32844103/packages/maven")
 
             authentication {
                 create<HttpHeaderAuthentication>("header")
