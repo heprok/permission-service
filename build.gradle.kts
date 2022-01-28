@@ -29,7 +29,18 @@ allprojects {
 subprojects {
     repositories {
         mavenCentral()
-        mavenLocal()
+        maven {
+            url = uri("https://gitlab.com/api/v4/projects/32844103/packages/maven")
+
+            authentication {
+                create<HttpHeaderAuthentication>("header")
+            }
+
+            credentials(HttpHeaderCredentials::class) {
+                name = "Deploy-Token"
+                value = System.getenv("CI_DEPLOY_PASSWORD")
+            }
+        }
     }
 
     apply {
