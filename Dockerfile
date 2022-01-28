@@ -7,11 +7,11 @@ ENV CI_DEPLOY_PASSWORD="${CI_DEPLOY_PASSWORD}"
 
 COPY . .
 
-RUN gradle bootJar --no-daemon
+RUN gradle api:bootJar --no-daemon
 
 FROM --platform=linux/arm64/v8 public.ecr.aws/docker/library/openjdk:11-jdk-slim
 
-COPY --from=builder /app/build/libs/*.jar /application.jar
+COPY --from=builder /app/api/build/libs/*.jar /application.jar
 
 EXPOSE 8080
 
