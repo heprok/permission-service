@@ -41,7 +41,7 @@ subprojects {
 
     dependencies {
         // Briolnik permission
-        implementation("com.briolink:permission:0.1.45-SNAPSHOT")
+        implementation("com.briolink:permission:0.1.0-SNAPSHOT")
         implementation("me.paulschwarz:spring-dotenv:${Versions.SPRING_DOTENV}")
     }
 }
