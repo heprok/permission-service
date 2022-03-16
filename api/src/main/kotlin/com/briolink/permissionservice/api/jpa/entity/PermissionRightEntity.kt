@@ -1,6 +1,6 @@
 package com.briolink.permissionservice.api.jpa.entity
 
-import com.briolink.permission.enumeration.PermissionRightEnum
+import com.briolink.lib.permission.enumeration.PermissionRightEnum
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -17,6 +17,8 @@ class PermissionRightEntity {
 
     @Column(name = "name", nullable = false, length = 100)
     lateinit var name: String
+
+    fun toEnum() = PermissionRightEnum.ofId(id!!)
 
     companion object {
         fun fromEnum(permissionRightEnum: PermissionRightEnum) = PermissionRightEntity().apply {

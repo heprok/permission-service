@@ -1,6 +1,6 @@
 package com.briolink.permissionservice.api.jpa.entity
 
-import com.briolink.permission.enumeration.AccessObjectTypeEnum
+import com.briolink.lib.permission.enumeration.AccessObjectTypeEnum
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue

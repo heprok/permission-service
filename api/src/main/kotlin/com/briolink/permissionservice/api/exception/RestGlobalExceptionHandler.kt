@@ -1,9 +1,10 @@
 package com.briolink.permissionservice.api.exception
 
-import com.briolink.permission.exception.ErrorResponse
-import com.briolink.permission.exception.ExceptionInterface
-import com.briolink.permission.exception.exist.PermissionRightExistException
-import com.briolink.permission.exception.exist.PermissionRoleExistException
+import com.briolink.lib.permission.exception.ErrorResponse
+import com.briolink.lib.permission.exception.ExceptionInterface
+import com.briolink.lib.permission.exception.exist.PermissionRightExistException
+import com.briolink.lib.permission.exception.exist.PermissionRoleExistException
+import com.briolink.lib.permission.exception.notfound.AbstractNotFoundException
 import com.briolink.permissionservice.api.util.LocaleMessage
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -31,7 +32,7 @@ class RestGlobalExceptionHandler(private val localeMessage: LocaleMessage) {
         return getResponseEntityWithTranslateMessage(ex)
     }
 
-    @ExceptionHandler(EntityNotFoundException::class)
+    @ExceptionHandler(value = [EntityNotFoundException::class, AbstractNotFoundException::class])
     fun notFoundException(ex: ExceptionInterface): ResponseEntity<ErrorResponse> {
         return getResponseEntityWithTranslateMessage(ex)
     }

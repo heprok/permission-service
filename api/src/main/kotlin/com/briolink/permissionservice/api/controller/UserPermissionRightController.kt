@@ -1,8 +1,9 @@
 package com.briolink.permissionservice.api.controller
 
-import com.briolink.permission.enumeration.PermissionRightEnum
-import com.briolink.permission.exception.PermissionRightNotConfigurableException
-import com.briolink.permission.exception.notfound.PermissionRightNotFoundException
+import com.briolink.lib.permission.enumeration.PermissionRightEnum
+import com.briolink.lib.permission.exception.PermissionRightNotConfigurableException
+import com.briolink.lib.permission.exception.notfound.PermissionRightNotFoundException
+import com.briolink.permissionservice.api.dto.UserPermissionRightsDto
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRightEntity
 import com.briolink.permissionservice.api.service.UserPermissionRightService
 import com.briolink.permissionservice.api.validation.ValidUUID
@@ -11,16 +12,19 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
+import io.swagger.v3.oas.annotations.parameters.RequestBody
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
+import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
 @RestController
@@ -78,6 +82,21 @@ class UserPermissionRightController(
         ),
         HttpStatus.OK,
     )
+
+    @PostMapping("/")
+    @ApiOperation("Set permission rights by userId and objectId if right configurable")
+    fun setRights(
+        @Valid @RequestBody dto: UserPermissionRightsDto
+    ): List<UserPermissionRightEntity> {
+        println(dto.permissionRights)
+        return userPermissionRightService.setPermissionRights(
+            userId = dto.userId,
+            accessObjectId = dto.accessObjectId,
+            permissionRole = dto.permissionRole,
+            accessObjectTypeEnum = dto.accessObjectType,
+            listEnabledPermissionRight = dto.permissionRights,
+        )
+    }
 
     @GetMapping("/check-permission/", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation("Check user permission right by user id and object id")

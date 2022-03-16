@@ -11,6 +11,11 @@ spring:
     multipart:
       max-file-size: 2MB
       max-request-size: 2MB
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://auth.${env.spring_profiles_active}.briolink.com/realms/briolink/protocol/openid-connect/certs
   datasource:
     url: jdbc:postgresql://${env.DB_HOST:localhost}:${env.DB_PORT:5432}/${env.spring_profiles_active}_permission
     username: ${env.DB_USER:ok}

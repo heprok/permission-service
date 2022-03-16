@@ -1,7 +1,7 @@
 package com.briolink.permissionservice.api.service
 
-import com.briolink.permission.enumeration.AccessObjectTypeEnum
-import com.briolink.permission.enumeration.PermissionRoleEnum
+import com.briolink.lib.permission.enumeration.AccessObjectTypeEnum
+import com.briolink.lib.permission.enumeration.PermissionRoleEnum
 import com.briolink.permissionservice.api.jpa.repository.DefaultPermissionRightRepository
 import org.springframework.stereotype.Service
 

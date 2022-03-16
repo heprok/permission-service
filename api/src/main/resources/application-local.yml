@@ -2,6 +2,16 @@ server:
   port: 8200
   error:
     include-stacktrace: always
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 spring:
   jpa:
     show-sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://auth.dev.briolink.com/realms/briolink/protocol/openid-connect/certs

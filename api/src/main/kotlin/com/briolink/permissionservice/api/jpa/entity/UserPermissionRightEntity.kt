@@ -28,5 +28,5 @@ class UserPermissionRightEntity {
     lateinit var right: PermissionRightEntity
 
     @Column(name = "enabled", nullable = false)
-    var enabled: Boolean? = false
+    var enabled: Boolean = false
 }

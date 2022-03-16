@@ -1,17 +1,19 @@
 package com.briolink.permissionservice.api.service
 
-import com.briolink.permission.enumeration.AccessObjectTypeEnum
-import com.briolink.permission.enumeration.PermissionRightEnum
-import com.briolink.permission.enumeration.PermissionRoleEnum
-import com.briolink.permission.exception.PermissionRightNotConfigurableException
-import com.briolink.permission.exception.exist.PermissionRightExistException
-import com.briolink.permission.exception.exist.PermissionRoleExistException
-import com.briolink.permission.exception.notfound.PermissionRightNotFoundException
+import com.briolink.lib.permission.enumeration.AccessObjectTypeEnum
+import com.briolink.lib.permission.enumeration.PermissionRightEnum
+import com.briolink.lib.permission.enumeration.PermissionRoleEnum
+import com.briolink.lib.permission.exception.PermissionRightNotConfigurableException
+import com.briolink.lib.permission.exception.exist.PermissionRightExistException
+import com.briolink.lib.permission.exception.exist.PermissionRoleExistException
+import com.briolink.lib.permission.exception.notfound.PermissionRightNotFoundException
+import com.briolink.lib.permission.exception.notfound.UserPermissionRoleNotFoundException
 import com.briolink.permissionservice.api.jpa.entity.DefaultPermissionRightEntity
 import com.briolink.permissionservice.api.jpa.entity.PermissionRightEntity
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRightEntity
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRoleEntity
 import com.briolink.permissionservice.api.jpa.repository.UserPermissionRightRepository
+import com.briolink.permissionservice.api.jpa.repository.UserPermissionRoleRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.Optional
@@ -22,6 +24,7 @@ import java.util.UUID
 class UserPermissionRightService(
     private val userPermissionRightRepository: UserPermissionRightRepository,
     private val defaultPermissionRightService: DefaultPermissionRightService,
+    private val userPermissionRoleRepository: UserPermissionRoleRepository
 ) {
 
     @Throws(PermissionRoleExistException::class)
@@ -134,6 +137,39 @@ class UserPermissionRightService(
         ) else userPermissionRightRepository.existsByUserIdAndAccessObjectIdAndRightIdAndEnabled(
             userId, accessObjectId, permissionRightEnum.id, enabled,
         )
+
+    fun setPermissionRights(
+        userId: UUID,
+        accessObjectId: UUID,
+        permissionRole: PermissionRoleEnum,
+        accessObjectTypeEnum: AccessObjectTypeEnum,
+        listEnabledPermissionRight: List<PermissionRightEnum>,
+    ): List<UserPermissionRightEntity> {
+        val userPermissionRole = userPermissionRoleRepository.findByUserIdAndAccessObjectId(userId, accessObjectId)
+            .orElseThrow { throw UserPermissionRoleNotFoundException() }
+        val defaultRights = defaultPermissionRightService.findAllByTypeIdAndRoleId(accessObjectTypeEnum, permissionRole)
+        val permissionRights = userPermissionRightRepository.findByUserIdAndAccessObjectId(userId, accessObjectId)
+        val mapRight = mutableMapOf<PermissionRightEntity, Boolean>()
+
+        defaultRights.forEach {
+            println(it.right.toEnum())
+            if (listEnabledPermissionRight.contains(it.right.toEnum())) {
+                if (it.configurable) mapRight[it.right] = true
+            } else {
+                if (it.configurable) mapRight[it.right] = false
+            }
+        }
+        println(mapRight)
+
+        mapRight.forEach { (right, enabled) ->
+            permissionRights.find { it.right == right }?.also {
+                it.enabled = enabled
+                userPermissionRightRepository.save(it)
+            }
+        }
+
+        return permissionRights.filter { it.enabled }
+    }
 
     @Throws(PermissionRightNotConfigurableException::class, PermissionRightNotFoundException::class)
     fun enablePermissionRight(

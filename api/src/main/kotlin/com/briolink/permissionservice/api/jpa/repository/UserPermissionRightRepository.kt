@@ -34,6 +34,12 @@ interface UserPermissionRightRepository : JpaRepository<UserPermissionRightEntit
         enabled: Boolean = true
     ): List<UserPermissionRightEntity>
 
+    @Query("SELECT u FROM UserPermissionRightEntity u WHERE u.userRole.userId = ?1 AND u.userRole.accessObjectId = ?2")
+    fun findByUserIdAndAccessObjectId(
+        userId: UUID,
+        accessObjectId: UUID,
+    ): List<UserPermissionRightEntity>
+
     @Query("SELECT u FROM UserPermissionRightEntity u WHERE u.userRole.userId = ?1 AND u.userRole.accessObjectId = ?2 AND u.right.id = ?3")
     fun findByUserIdAndAccessObjectIdAndRightId(
         userId: UUID,
