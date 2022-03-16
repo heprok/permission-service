@@ -48,22 +48,22 @@ allprojects {
 
             // https://github.com/diffplug/spotless/issues/142
             ktlint().userData(
-                    mapOf(
-                            "indent_style" to "space",
-                            "max_line_length" to "140",
-                            "indent_size" to "4",
-                            "ij_kotlin_code_style_defaults" to "KOTLIN_OFFICIAL",
-                            "ij_kotlin_line_comment_at_first_column" to "false",
-                            "ij_kotlin_line_comment_add_space" to "true",
-                            "ij_kotlin_name_count_to_use_star_import" to "2147483647",
-                            "ij_kotlin_name_count_to_use_star_import_for_members" to "2147483647",
-                            "ij_kotlin_keep_blank_lines_in_declarations" to "1",
-                            "ij_kotlin_keep_blank_lines_in_code" to "1",
-                            "ij_kotlin_keep_blank_lines_before_right_brace" to "0",
-                            "ij_kotlin_align_multiline_parameters" to "false",
-                            "ij_continuation_indent_size" to "4",
-                            "insert_final_newline" to "true",
-                    ),
+                mapOf(
+                    "indent_style" to "space",
+                    "max_line_length" to "140",
+                    "indent_size" to "4",
+                    "ij_kotlin_code_style_defaults" to "KOTLIN_OFFICIAL",
+                    "ij_kotlin_line_comment_at_first_column" to "false",
+                    "ij_kotlin_line_comment_add_space" to "true",
+                    "ij_kotlin_name_count_to_use_star_import" to "2147483647",
+                    "ij_kotlin_name_count_to_use_star_import_for_members" to "2147483647",
+                    "ij_kotlin_keep_blank_lines_in_declarations" to "1",
+                    "ij_kotlin_keep_blank_lines_in_code" to "1",
+                    "ij_kotlin_keep_blank_lines_before_right_brace" to "0",
+                    "ij_kotlin_align_multiline_parameters" to "false",
+                    "ij_continuation_indent_size" to "4",
+                    "insert_final_newline" to "true",
+                ),
             )
 
             trimTrailingWhitespace()
@@ -94,8 +94,8 @@ subprojects {
         mavenCentral()
         mavenLocal()
         setOf(
-                29889174, // BL Event
-                32844103, // BL Permission
+            29889174, // BL Event
+            32844103, // BL Permission
         ).forEach {
             maven {
                 url = uri("https://gitlab.com/api/v4/projects/$it/packages/maven")
@@ -110,18 +110,18 @@ subprojects {
         }
     }
 
-apply {
-    plugin("kotlin")
-    plugin("io.spring.dependency-management")
-}
+    apply {
+        plugin("kotlin")
+        plugin("io.spring.dependency-management")
+    }
 
-val implementation by configurations
+    val implementation by configurations
 
-dependencies {
-    // Briolnik permission
-    implementation("com.briolink.lib:permission:${Versions.BRIOLINK_PERMISSION}")
-    implementation("me.paulschwarz:spring-dotenv:${Versions.SPRING_DOTENV}")
-}
+    dependencies {
+        // Briolnik permission
+        implementation("com.briolink.lib:permission:${Versions.BRIOLINK_PERMISSION}")
+        implementation("me.paulschwarz:spring-dotenv:${Versions.SPRING_DOTENV}")
+    }
 }
 tasks.withType<Test> {
     useJUnitPlatform()
