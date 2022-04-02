@@ -38,16 +38,16 @@ class RestGlobalExceptionHandler(private val localeMessage: LocaleMessage) {
     }
 
     @ExceptionHandler(value = [BindException::class])
-    fun validationBindException(ex: BindException): ResponseEntity<Any> {
+    fun validationBindException(ex: BindException): ResponseEntity<ErrorResponse> {
 
         val msg = ex.fieldErrors.joinToString("\n") {
             it.field + ": " + it.defaultMessage?.let { key -> localeMessage.getMessage(key) }
         }
-        return ResponseEntity(msg, HttpStatus.NOT_ACCEPTABLE)
+        return ResponseEntity(ErrorResponse(message = msg, status = HttpStatus.NOT_ACCEPTABLE.value()), HttpStatus.NOT_ACCEPTABLE)
     }
 
     @ExceptionHandler(value = [ConstraintViolationException::class])
-    fun validationException(ex: ConstraintViolationException): ResponseEntity<Any> {
-        return ResponseEntity(ex.message, HttpStatus.NOT_ACCEPTABLE)
+    fun validationException(ex: ConstraintViolationException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity(ErrorResponse(message = ex.message, status = HttpStatus.NOT_ACCEPTABLE.value()), HttpStatus.NOT_ACCEPTABLE)
     }
 }
