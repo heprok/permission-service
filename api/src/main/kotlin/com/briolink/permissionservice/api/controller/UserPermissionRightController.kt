@@ -1,9 +1,9 @@
 package com.briolink.permissionservice.api.controller
 
-import com.briolink.lib.permission.enumeration.PermissionRightEnum
 import com.briolink.lib.permission.exception.PermissionRightNotConfigurableException
 import com.briolink.lib.permission.exception.notfound.PermissionRightNotFoundException
 import com.briolink.permissionservice.api.dto.UserPermissionRightsDto
+import com.briolink.permissionservice.api.enumeration.PermissionRightEnum
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRightEntity
 import com.briolink.permissionservice.api.service.UserPermissionRightService
 import com.briolink.permissionservice.api.validation.ValidUUID
@@ -88,7 +88,6 @@ class UserPermissionRightController(
     fun setRights(
         @Valid @RequestBody dto: UserPermissionRightsDto
     ): List<UserPermissionRightEntity> {
-        println(dto.permissionRights)
         return userPermissionRightService.setPermissionRights(
             userId = dto.userId,
             accessObjectId = dto.accessObjectId,
@@ -101,7 +100,7 @@ class UserPermissionRightController(
     @GetMapping("/check-permission/", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation("Check user permission right by user id and object id")
     @ResponseBody
-    fun checkHavePermission(
+    fun checkPermission(
         @NotNull @ValidUUID @ApiParam(value = "User id", example = "5332b172-d84c-4643-9b16-98366bb03e22", required = true)
         userId: String,
         @NotNull @ValidUUID @ApiParam(value = "Object id", example = "d0a2312e-2d63-4404-b215-7ef94bebdc5c", required = true)

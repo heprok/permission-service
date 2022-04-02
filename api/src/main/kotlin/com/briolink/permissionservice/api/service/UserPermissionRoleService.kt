@@ -4,6 +4,7 @@ import com.briolink.lib.permission.enumeration.AccessObjectTypeEnum
 import com.briolink.lib.permission.enumeration.PermissionRoleEnum
 import com.briolink.lib.permission.exception.notfound.AccessObjectTypeNotFoundException
 import com.briolink.lib.permission.exception.notfound.PermissionRoleNotFoundException
+import com.briolink.lib.permission.exception.notfound.UserPermissionRoleNotFoundException
 import com.briolink.permissionservice.api.jpa.entity.AccessObjectTypeEntity
 import com.briolink.permissionservice.api.jpa.entity.PermissionRoleEntity
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRoleEntity
@@ -68,7 +69,7 @@ class UserPermissionRoleService(
         accessObjectType: AccessObjectTypeEnum,
         accessObjectId: UUID,
     ): UserPermissionRoleEntity {
-        val userPermissionRoleEntity = find(userId, accessObjectId).orElseThrow { throw PermissionRoleNotFoundException() }.let {
+        val userPermissionRoleEntity = find(userId, accessObjectId).orElseThrow { throw UserPermissionRoleNotFoundException() }.let {
             it.role = permissionRoleRepository.findById(permissionRole.id)
                 .orElseThrow { throw PermissionRoleNotFoundException() }
             userPermissionRoleRepository.save(it)
