@@ -1,13 +1,13 @@
 package com.briolink.permissionservice.api.service
 
 import com.briolink.lib.permission.enumeration.AccessObjectTypeEnum
-import com.briolink.lib.permission.enumeration.PermissionRightEnum
 import com.briolink.lib.permission.enumeration.PermissionRoleEnum
 import com.briolink.lib.permission.exception.PermissionRightNotConfigurableException
 import com.briolink.lib.permission.exception.exist.PermissionRightExistException
 import com.briolink.lib.permission.exception.exist.PermissionRoleExistException
 import com.briolink.lib.permission.exception.notfound.PermissionRightNotFoundException
 import com.briolink.lib.permission.exception.notfound.UserPermissionRoleNotFoundException
+import com.briolink.permissionservice.api.enumeration.PermissionRightEnum
 import com.briolink.permissionservice.api.jpa.entity.DefaultPermissionRightEntity
 import com.briolink.permissionservice.api.jpa.entity.PermissionRightEntity
 import com.briolink.permissionservice.api.jpa.entity.UserPermissionRightEntity
@@ -159,7 +159,6 @@ class UserPermissionRightService(
                 if (it.configurable) mapRight[it.right] = false
             }
         }
-        println(mapRight)
 
         mapRight.forEach { (right, enabled) ->
             permissionRights.find { it.right == right }?.also {

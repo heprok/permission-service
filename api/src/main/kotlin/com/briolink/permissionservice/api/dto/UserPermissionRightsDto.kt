@@ -1,8 +1,8 @@
 package com.briolink.permissionservice.api.dto
 
 import com.briolink.lib.permission.enumeration.AccessObjectTypeEnum
-import com.briolink.lib.permission.enumeration.PermissionRightEnum
 import com.briolink.lib.permission.enumeration.PermissionRoleEnum
+import com.briolink.permissionservice.api.enumeration.PermissionRightEnum
 import io.swagger.annotations.ApiModelProperty
 import java.util.UUID
 import javax.validation.constraints.NotNull

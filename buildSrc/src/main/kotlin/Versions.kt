@@ -9,6 +9,6 @@ object Versions {
     const val LIQUIBASE_CORE = "4.8.0"
     const val SPOTLESS = "6.3.0"
     const val HIBERNATE_TYPES_55 = "2.14.0"
-    const val BRIOLINK_PERMISSION = "0.2.2-SNAPSHOT"
+    const val BRIOLINK_PERMISSION = "0.3.0-SNAPSHOT"
     const val KOTLIN_LOGGING_JVM = "2.1.21"
 }

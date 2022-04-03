@@ -35,7 +35,7 @@ import javax.validation.constraints.NotNull
     ApiResponse(code = 200, message = "Role found"),
     ApiResponse(code = 201, message = "Role created"),
     ApiResponse(code = 204, message = "Role deleted"),
-    ApiResponse(code = 204, message = "Role no found"),
+    ApiResponse(code = 204, message = "Role not found"),
     ApiResponse(code = 403, message = "Unauthorized"),
     ApiResponse(code = 404, message = "Role not found"),
     ApiResponse(code = 406, message = "Properties not valid"),
