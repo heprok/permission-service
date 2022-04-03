@@ -5,3 +5,5 @@ databaseChangeLog:
       file: migration/2.changelog.yml
   - include:
       file: migration/3.changelog.yml
+  - include:
+      file: migration/4.changelog.yml

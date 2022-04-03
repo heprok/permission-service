@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: oleg@briolink.com
+      changes:
+        - insert:
+            tableName: permission_right
+            columns:
+              - column:
+                  name: id
+                  value: 11
+              - column:
+                  name: name
+                  value: EditWidget
+
+        - sql:
+            sql: "INSERT INTO default_permission_right VALUES 
+                    (uuid_generate_v4(), 1, 11, 1, true, false),
+                    (uuid_generate_v4(), 2, 11, 1, true, false),
+                    (uuid_generate_v4(), 3, 11, 1, false, true),
+                    (uuid_generate_v4(), 4, 11, 1, false, false);
+            "
+        - sql:
+            sql: "INSERT INTO user_permission_right(user_role_uuid, uuid, right_id, enabled)
+                    SELECT f.user_role_uuid, uuid_generate_v4() as uuid, f.right_id, f.enabled
+                    from (SELECT 
+                          distinct pro.uuid as user_role_uuid,
+                          11       as right_id,
+                          CASE
+                            WHEN pro.role_id = 1 THEN true
+                            WHEN pro.role_id = 2 THEN true
+                            WHEN pro.role_id = 3 THEN false
+                            WHEN pro.role_id = 4 THEN false
+                          END  as enabled
+                          FROM user_permission_right pr
+                          LEFT JOIN user_permission_role pro ON pro.uuid = pr.user_role_uuid) as f;"

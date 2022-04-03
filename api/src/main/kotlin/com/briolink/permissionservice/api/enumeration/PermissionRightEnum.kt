@@ -32,7 +32,10 @@ enum class PermissionRightEnum(@JsonValue val id: Int) {
     CreateProject(9),
 
     @JsonProperty("10")
-    EditConnection(10);
+    EditConnection(10),
+
+    @JsonProperty("11")
+    EditWidget(11);
 
     companion object {
         private val map = values().associateBy(PermissionRightEnum::id)
